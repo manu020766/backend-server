@@ -12,11 +12,14 @@ mongoose.connection.openUri('mongodb+srv://manuSi:MongoDbManu1966@manucluster-hl
     console.log('Base de datos: \x1b[32m%s\x1b[0m', 'online')
 })
 
+const appRoutes = require('./routes/app')
+const usuarioRoutes = require('./routes/usuario')
 
-// Rutas
-app.get('/', (req, res) => {
-    res.status(200).json({ mensaje: 'Hola mundillo!!!' })
-})
+
+// Routes
+app.use('/usuario', usuarioRoutes)
+app.use('/', appRoutes)
+
 
 
 // Servidor
