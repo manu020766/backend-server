@@ -1,10 +1,17 @@
 // Librerias y utilidades
 const express = require('express')
-
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 
 // Inicializaciones
 const app = express()
-const mongoose = require('mongoose')
+
+//Configurar body parser
+//Parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+//Parse application/json
+app.use(bodyParser.json())
 
 // Conexión a base de datos de mongo
 mongoose.connection.openUri('mongodb+srv://manuSi:MongoDbManu1966@manucluster-hltsu.mongodb.net/hospitalDB', (err, res) => {
