@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 const Usuario = require('../models/usuario')
+const SEED = require('../config/config').SEED
 
 // Rutas
 
@@ -17,7 +18,7 @@ router.post('/', (req, res) => {
     // ====================================
     // Metodo dos
     // ====================================
-    Usuario.findOne({ usuario: body.usuario })
+    Usuario.findOne({ email: body.email })
     .then((usuarioDB) => {
         if(!usuarioDB){
             return res.status(401).json({
@@ -34,7 +35,6 @@ router.post('/', (req, res) => {
             });
         }
 
-        const SEED = '>>>@este-es-un-seed-DIFICULTAD-100;)<<<'
         usuarioDB.password = ':)'
         const token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 }) // 4 horas
         res.status(200).json({
