@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const Usuario = require('../models/usuario')
 
@@ -13,51 +14,87 @@ const Usuario = require('../models/usuario')
 router.post('/', (req, res) => {
 
     const body = req.body
-
-    Usuario.findOne({ email: body.email }, (err, usuarioDB) => {
-        if (err) {
-            return res.status(500).json({
+    // ====================================
+    // Metodo dos
+    // ====================================
+    Usuario.findOne({ usuario: body.usuario })
+    .then((usuarioDB) => {
+        if(!usuarioDB){
+            return res.status(401).json({
                 ok: false,
-                mensaje: 'No se pudo encontrar el usuario'
-            })
+                mensaje: 'Credenciales incorrectas!',
+                errors: { message: 'Credenciales incorrectas!' }
+            });
         }
-        if (!usuarioDB) {
-            return res.status(400).json({
-                ok: false,
-                mensaje: 'Usuarion con email ' + body.email + ' no encontrado'
-            })
+        if(!bcrypt.compareSync(body.password, usuarioDB.password)){
+            return res.status(401).json({
+                ok : false,
+                mensaje: 'Credenciales incorrectas!',
+                errors: { message: 'Credenciales incorrectas' }
+            });
         }
 
-        bcrypt.compare(body.password, usuarioDB.password)
-            .then( isMatch => {
-                console.log(isMatch)
-
-                if(!isMatch) {
-                    console.log('paso por aquí')
-                    return res.status(400).json({
-                        ok: false,
-                        mensaje: 'Usuarion con password ' + body.password + ' no encontrado',
-                        respuesta: res
-                    })
-                }
-
-                res.status(200).json({
-                    ok: true,
-                    mensaje: usuarioDB,
-                    passwordLogin: body.password,
-                    passwordDB: usuarioDB.password
-                })
-            })
-            .catch( e => {
-                res.status(400).json({
-                    ok: false,
-                    mensaje: 'Usuarion con password ' + body.password + ' no encontrado',
-                    porras: 'mierda',
-                    passwordLogin: body.password,
-                    passwordDB: usuarioDB.password
-                })
-            })
+        const SEED = '>>>@este-es-un-seed-DIFICULTAD-100;)<<<'
+        usuarioDB.password = ':)'
+        const token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 }) // 4 horas
+        res.status(200).json({
+            ok: true,
+            usuarioDB,
+            id: usuarioDB._id,
+            token
+        })
     })
+    .catch((err) => {
+        res.status(400).json({
+            ok: false,
+            mensaje: 'Error al procesar la solicitud!',
+            errors: err
+        });
+    });
+
+// ====================================
+// Metodo uno - Funciona correctamente
+// ====================================
+// Usuario.findOne({ usuario: body.usuario }, (err, usuarioDB) => {
+ 
+//     if(err){
+//         return res.status(500).json({
+//             ok: false,
+//             mensaje: 'Error al procesar la solicitud!',
+//             errors: err
+//         })
+//     }
+    
+//     if(!usuarioDB){
+        
+//         return res.status(401).json({
+//             ok: false,
+//             mensaje: 'Credenciales incorrectas!',
+//             errors: { message: 'Credenciales incorrectas' }
+//         })
+//     }
+    
+//     if(!bcrypt.compareSync(body.password, usuarioDB.password)){
+//         return res.status(401).json({
+//             ok : false,
+//             mensaje: 'Credenciales incorrectas!',
+//             errors: { message: 'Credenciales incorrectas' }
+//         })
+//     }
+ 
+//     usuarioDB.password = ':)'
+ 
+//     const token = jwt.sign({ usuario: usuarioDB }, SEED, { expiresIn: 14400 })
+ 
+//     res.status(200).json({
+//         ok: true,
+//         usuarioDB,
+//         id: usuarioDB._id,
+//         token
+//     })
+// })
+ 
+ 
 })
 
 module.exports = router
