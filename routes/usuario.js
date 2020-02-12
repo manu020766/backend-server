@@ -94,7 +94,7 @@ router.delete('/:id', (req, res) => {
 
         res.status(200).json({
             ok: true,
-            mensaje: 'Usuario borrado'
+            mensaje: usuarioDelete
         })
     })
 })
