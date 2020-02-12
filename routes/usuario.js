@@ -3,10 +3,9 @@ const router = express.Router()
 
 const bcrypt = require('bcryptjs')
 
-const jwt = require('jsonwebtoken')
-const { SEED } = require('../config/config')
-
 const Usuario = require('../models/usuario')
+
+const { verificaToken } = require('../middlewares/autentication')
 
 // Rutas
 
@@ -34,31 +33,10 @@ router.get('/', (req, res) => {
         )
 })
 
-//-------------------------------------------------------------------------------
-//--- Verificar token recibido a través de un parmametro en la url --------------
-//--- No me gusta, me parece más limpio pasarlo en el header --------------------
-//-------------------------------------------------------------------------------
-router.use('/', (req, res, next) => {
-    const token = req.query.token
-
-    jwt.verify(token, SEED, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({
-                ok: false,
-                mensaje: 'No tiene autorización',
-                errors: err
-            })
-        }
-
-        next()
-    })
-})
-
-
 //----------------------------------------
 //--- Actualizar un usuario --------------
 //----------------------------------------
-router.put('/:id', (req, res) => {
+router.put('/:id', verificaToken , (req, res) => {
 
     const id = req.params.id
     const body = req.body
@@ -95,7 +73,8 @@ router.put('/:id', (req, res) => {
     
             res.status(200).json({
                 ok: true,
-                usuario: usuarioGuardado
+                usuario: usuarioGuardado,
+                usuarioToken: req.usuario // Usuario que ha solicitado hacer la modificación
             })
         })
     })   
@@ -104,7 +83,7 @@ router.put('/:id', (req, res) => {
 //----------------------------------------
 //--- Borrar un usuario ------------------
 //----------------------------------------
-router.delete('/:id', (req, res) => {
+router.delete('/:id', verificaToken, (req, res) => {
     const id = req.params.id
 
     Usuario.findByIdAndDelete(id, (err, usuarioDelete) => {
@@ -118,7 +97,8 @@ router.delete('/:id', (req, res) => {
 
         res.status(200).json({
             ok: true,
-            mensaje: usuarioDelete
+            mensaje: usuarioDelete,
+            usuarioToken: req.usuario // Usuario que ha solicitado borrar el usuario
         })
     })
 })
@@ -126,7 +106,7 @@ router.delete('/:id', (req, res) => {
 //----------------------------------------
 //--- Grabar un usuario ------------------
 //----------------------------------------
-router.post('/', (req, res) => {
+router.post('/', verificaToken, (req, res) => {
     const body = req.body
 
     const usuario = new Usuario({
@@ -148,7 +128,8 @@ router.post('/', (req, res) => {
 
         res.status(201).json({
             ok: true,
-            usuario: usuarioGuardado
+            usuario: usuarioGuardado,
+            usuarioToken: req.usuario // Usuario que ha solicitado crear el usuario
         })
     })
 })
