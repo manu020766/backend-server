@@ -7,11 +7,8 @@ const mongoose = require('mongoose')
 const app = express()
 
 //Configurar body parser
-//Parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
-
-//Parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false })) //Parse application/x-www-form-urlencoded
+app.use(bodyParser.json()) //Parse application/json
 
 // Conexión a base de datos de mongo
 mongoose.connection.openUri('mongodb+srv://manuSi:MongoDbManu1966@manucluster-hltsu.mongodb.net/hospitalDB', (err, res) => {
@@ -19,15 +16,14 @@ mongoose.connection.openUri('mongodb+srv://manuSi:MongoDbManu1966@manucluster-hl
     console.log('Base de datos: \x1b[32m%s\x1b[0m', 'online')
 })
 
-const appRoutes = require('./routes/app')
-const usuarioRoutes = require('./routes/usuario')
-
-
 // Routes
+const loginRoutes = require('./routes/login')
+const usuarioRoutes = require('./routes/usuario')
+const appRoutes = require('./routes/app')
+
+app.use('/login', loginRoutes)
 app.use('/usuario', usuarioRoutes)
 app.use('/', appRoutes)
-
-
 
 // Servidor
 app.listen(3000, console.log('Server listening port 3000: \x1b[32m%s\x1b[0m', 'online'))
