@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 const Usuario = require('../models/usuario')
-const SEED = require('../config/config').SEED
+const { SEED } = require('../config/config')
 
 // Rutas
 
