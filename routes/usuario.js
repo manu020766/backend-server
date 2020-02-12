@@ -3,6 +3,9 @@ const router = express.Router()
 
 const bcrypt = require('bcryptjs')
 
+const jwt = require('jsonwebtoken')
+const { SEED } = require('../config/config')
+
 const Usuario = require('../models/usuario')
 
 // Rutas
@@ -30,6 +33,27 @@ router.get('/', (req, res) => {
             }
         )
 })
+
+//-------------------------------------------------------------------------------
+//--- Verificar token recibido a través de un parmametro en la url --------------
+//--- No me gusta, me parece más limpio pasarlo en el header --------------------
+//-------------------------------------------------------------------------------
+router.use('/', (req, res, next) => {
+    const token = req.query.token
+
+    jwt.verify(token, SEED, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                mensaje: 'No tiene autorización',
+                errors: err
+            })
+        }
+
+        next()
+    })
+})
+
 
 //----------------------------------------
 //--- Actualizar un usuario --------------
