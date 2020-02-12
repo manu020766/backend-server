@@ -39,7 +39,7 @@ router.put('/:id', (req, res) => {
     const id = req.params.id
     const body = req.body
 
-    Usuario.findById(id, (err, usuario) => {
+    Usuario.findById(id, 'nombre email role', (err, usuario) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -68,8 +68,6 @@ router.put('/:id', (req, res) => {
                     errors: err
                 })
             }
-
-            usuarioGuardado.password = ':)'
     
             res.status(200).json({
                 ok: true,
