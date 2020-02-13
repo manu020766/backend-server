@@ -103,7 +103,7 @@ router.put('/:id', verificaToken, (req, res)=> {
 
         hospital.save((err, hospitalGuardado) => {
             if (err) {
-                res.status(400).json({
+                return res.status(400).json({
                     ok: false,
                     mensaje: 'Error al actualizar el hospital',
                     errors: err
