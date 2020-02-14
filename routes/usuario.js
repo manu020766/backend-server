@@ -12,8 +12,21 @@ const { verificaToken } = require('../middlewares/autentication')
 //----------------------------------------
 //--- Recuperar todos los usuarios -------
 //----------------------------------------
-router.get('/', (req, res) => {
-    Usuario.find({},'nombre email role password')
+router.get('', (req, res) => {
+
+    const MINIMO_MOSTRAR = 5
+    let desde = parseInt(req.query.desde)
+    let mostrar = parseInt(req.query.mostrar)
+
+    desde = isNaN(desde) ? 0 : desde
+    mostrar = isNaN(mostrar) ? MINIMO_MOSTRAR : mostrar
+
+    desde = desde < 0 ? 0 : desde
+    mostrar = mostrar < 0 ? MINIMO_MOSTRAR : mostrar
+
+    Usuario.find({},'nombre email role img')
+        .skip(desde)
+        .limit(mostrar)
         .sort('-nombre') //con el signo - delante orden desc, sin signo asc
         .exec(
             (err, usuarios) => {

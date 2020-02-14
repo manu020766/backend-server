@@ -6,7 +6,19 @@ const { verificaToken } = require('../middlewares/autentication')
 
 
 router.get('/', (req, res) => {
+    const MINIMO_MOSTRAR = 5
+    let desde = parseInt(req.query.desde)
+    let mostrar = parseInt(req.query.mostrar)
+
+    desde = isNaN(desde) ? 0 : desde
+    mostrar = isNaN(mostrar) ? MINIMO_MOSTRAR : mostrar
+
+    desde = desde < 0 ? 0 : desde
+    mostrar = mostrar < 0 ? MINIMO_MOSTRAR : mostrar
+
     Medico.find({})
+        .skip(desde)
+        .limit(mostrar)
         .exec((err, medicos) => {
             if (err) {
                 return res.status(500).json({
