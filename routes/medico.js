@@ -28,9 +28,20 @@ router.get('/', (req, res) => {
                 })
             }
 
-            res.status(200).json({
-                ok: true,
-                medicos
+            Medico.countDocuments({}, (err, total)=>{
+                if (err) {
+                    res.status(500).json({
+                        ok: false,
+                        mensaje: 'No se puede recuperar los médicos',
+                        errors: err
+                    })
+                }
+
+                res.status(200).json({
+                    ok: true,
+                    medicos,
+                    total
+                })
             })
         })
 })

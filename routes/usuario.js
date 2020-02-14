@@ -37,11 +37,22 @@ router.get('', (req, res) => {
                         errors: err
                     })
                 }
-                
-                res.status(200).json({
-                    ok: true,
-                    usuarios
+
+                Usuario.estimatedDocumentCount({}, (err, total)=> {
+                    if (err) {
+                        res.status(500).json({
+                            ok: false,
+                            mensaje: 'No se puede recuperar los usuarios',
+                            errors: err
+                        })
+                    }
+
+                    res.status(200).json({
+                        ok: true,
+                        usuarios,
+                        total
                     })
+                })
             }
         )
 })
