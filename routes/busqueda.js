@@ -4,6 +4,35 @@ const Hospital = require('../models/hospital')
 const Medico = require('../models/medico')
 const Usuario = require('../models/usuario')
 
+router.get('/todo/:tipo/:busqueda', (req, res) => {
+    const tipo = req.params.tipo
+    const busqueda = req.params.busqueda
+    const regex = new RegExp(busqueda, 'i')
+
+    let promise
+    switch(tipo) {
+        case 'hospital':
+            promise = buscarHospitales(regex)
+            break
+        case 'medico':
+            promise = buscarMedicos(regex)
+            break
+        case 'usuario':
+            promise = buscarUsuarios(regex)
+            break
+        default:
+            res.status(400).json({
+                ok: false,
+                mensaje: 'La información que solicitas no existe'
+            })
+    }
+
+    promise
+    .then( datos => { res.status(200).json({ok: true, [tipo]: datos })})
+    .catch( error => res.status(500).json({ok:false, mensaje: error}))
+
+})
+
 router.get('/todo/:busqueda', (req, res)=> {
     const busqueda = req.params.busqueda
     const regex = new RegExp(busqueda, 'i')
@@ -22,27 +51,16 @@ router.get('/todo/:busqueda', (req, res)=> {
         })
     })
     .catch( error => res.status(500).json({ok:false, mensaje: error}))
-
-    // buscarHospitales(regex)
-    //     .then(hospitales => res.status(200).json({ ok: true, hospitales}))
-    //     .catch( error => res.status(500).json({ok:false, mensaje: error}))
-
-    // buscarMedicos(regex)
-    //     .then(medicos => res.status(200).json({ ok: true, medicos}))
-    //     .catch( error => res.status(500).json({ok:false, mensaje: error}))
-
-    // buscarUsuarios(regex)
-    //     .then(usuarios => res.status(200).json({ ok: true, usuarios}))
-    //     .catch( error => res.status(500).json({ok:false, mensaje: error}))
-
 })
 
 function buscarHospitales(regex) {
     return new Promise((resolve, reject) => {
-        Hospital.find({ "nombre": regex }, (err, hospitales) => {
-            if (err) reject("No se ha podido realizar la consulta de hospitales")
-            resolve(hospitales)
-        })
+        Hospital.find({ "nombre": regex })
+            .populate("usuarios")   // Aquí se pone el nombre de la coleccion : usuarios y no el campo del modelo: usuario
+            .exec((err, hospitales) => {
+                if (err) reject("No se ha podido realizar la consulta de hospitales")
+                resolve(hospitales)
+            })
     })
 }
 
