@@ -55,10 +55,12 @@ function buscarMedicos(regex) {
     })
 }
 
-function buscarUsuarios(regex) {
-    return new Promise((resolve, reject) => {
-        Usuario.find({ "nombre": regex }, (err, usuarios) => {
-            if (err) reject("No se ha podido realizar la consulta de usuarios")
+function buscarUsuarios(regex){
+    return new Promise ((resolve,reject) => {
+        Usuario.find({}, 'nombre email role')
+        .or([{ 'nombre': regex}, { 'email': regex}])
+        .exec((err, usuarios) =>{
+            if(err) reject('Error al cargar usuario', err)
             resolve(usuarios)
         })
     })
