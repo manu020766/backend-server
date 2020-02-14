@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false })) //Parse application/x-www-fo
 app.use(bodyParser.json()) //Parse application/json
 
 // Conexión a base de datos de mongo
-mongoose.connection.openUri('mongodb+srv://manuSi:MongoDbManu1966@manucluster-hltsu.mongodb.net/hospitalDB', (err, res) => {
+mongoose.connection.openUri('mongodb+srv://manuSi:MongoDbManu1966@manucluster-hltsu.mongodb.net/hospitalDB', { useNewUrlParser: true, useUnifiedTopology: true }, (err, res) => {
     if (err) throw err
     console.log('Base de datos: \x1b[32m%s\x1b[0m', 'online')
 })

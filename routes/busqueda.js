@@ -10,7 +10,7 @@ router.get('/todo/:tipo/:busqueda', (req, res) => {
     const regex = new RegExp(busqueda, 'i')
 
     let promise
-    switch(tipo) {
+    switch (tipo) {
         case 'hospital':
             promise = buscarHospitales(regex)
             break
@@ -28,12 +28,12 @@ router.get('/todo/:tipo/:busqueda', (req, res) => {
     }
 
     promise
-    .then( datos => { res.status(200).json({ok: true, [tipo]: datos })})
-    .catch( error => res.status(500).json({ok:false, mensaje: error}))
+        .then(datos => { res.status(200).json({ ok: true, [tipo]: datos }) })
+        .catch(error => res.status(500).json({ ok: false, mensaje: error }))
 
 })
 
-router.get('/todo/:busqueda', (req, res)=> {
+router.get('/todo/:busqueda', (req, res) => {
     const busqueda = req.params.busqueda
     const regex = new RegExp(busqueda, 'i')
 
@@ -42,21 +42,21 @@ router.get('/todo/:busqueda', (req, res)=> {
         buscarMedicos(regex),
         buscarUsuarios(regex)
     ])
-    .then(resultado => {
-        res.status(200).json({
-            ok:true,
-            hospitales: resultado[0],
-            medicos: resultado[1],
-            usuarios: resultado[2]
+        .then(resultado => {
+            res.status(200).json({
+                ok: true,
+                hospitales: resultado[0],
+                medicos: resultado[1],
+                usuarios: resultado[2]
+            })
         })
-    })
-    .catch( error => res.status(500).json({ok:false, mensaje: error}))
+        .catch(error => res.status(500).json({ ok: false, mensaje: error }))
 })
 
 function buscarHospitales(regex) {
     return new Promise((resolve, reject) => {
         Hospital.find({ "nombre": regex })
-            .populate("usuarios")   // Aquí se pone el nombre de la coleccion : usuarios y no el campo del modelo: usuario
+            .populate("usuario", 'nombre email')   // Aquí se pone el nombre de la coleccion : usuarios y no el campo del modelo: usuario
             .exec((err, hospitales) => {
                 if (err) reject("No se ha podido realizar la consulta de hospitales")
                 resolve(hospitales)
@@ -73,14 +73,14 @@ function buscarMedicos(regex) {
     })
 }
 
-function buscarUsuarios(regex){
-    return new Promise ((resolve,reject) => {
+function buscarUsuarios(regex) {
+    return new Promise((resolve, reject) => {
         Usuario.find({}, 'nombre email role')
-        .or([{ 'nombre': regex}, { 'email': regex}])
-        .exec((err, usuarios) =>{
-            if(err) reject('Error al cargar usuario', err)
-            resolve(usuarios)
-        })
+            .or([{ 'nombre': regex }, { 'email': regex }])
+            .exec((err, usuarios) => {
+                if (err) reject('Error al cargar usuario', err)
+                resolve(usuarios)
+            })
     })
 }
 
