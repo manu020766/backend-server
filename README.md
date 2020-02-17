@@ -1,2 +1,2 @@
 # Backend server
-Backend realizado en: Node, express, mongoose y mongodb atlas
+Backend realizado en: Node, express, mongoose y mongodb atlas.
