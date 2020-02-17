@@ -17,6 +17,7 @@ mongoose.connection.openUri('mongodb+srv://manuSi:MongoDbManu1966@manucluster-hl
 })
 
 // Routes
+const uploadRoutes = require('./routes/upload')
 const busquedaRoutes = require('./routes/busqueda')
 const medicoRoutes = require('./routes/medico')
 const hospitalRoutes = require('./routes/hospital')
@@ -24,6 +25,7 @@ const loginRoutes = require('./routes/login')
 const usuarioRoutes = require('./routes/usuario')
 const appRoutes = require('./routes/app')
 
+app.use('/upload', uploadRoutes)
 app.use('/busqueda', busquedaRoutes)
 app.use('/medico', medicoRoutes)
 app.use('/hospital', hospitalRoutes)

@@ -56,7 +56,7 @@ router.get('/todo/:busqueda', (req, res) => {
 function buscarHospitales(regex) {
     return new Promise((resolve, reject) => {
         Hospital.find({ "nombre": regex })
-            .populate("usuario", 'nombre email')   // Aquí se pone el nombre de la coleccion : usuarios y no el campo del modelo: usuario
+            .populate("usuario", 'nombre email')   // Aquí se pone el campo del modelo hospital: usuario
             .exec((err, hospitales) => {
                 if (err) reject("No se ha podido realizar la consulta de hospitales")
                 resolve(hospitales)
