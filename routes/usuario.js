@@ -2,8 +2,10 @@ const express = require('express')
 const router = express.Router()
 
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const Usuario = require('../models/usuario')
+const { SEED } = require('../config/config')
 
 const { verificaToken } = require('../middlewares/autentication')
 
