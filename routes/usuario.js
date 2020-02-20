@@ -132,7 +132,8 @@ router.delete('/:id', verificaToken, (req, res) => {
 //----------------------------------------
 //--- Grabar un usuario ------------------
 //----------------------------------------
-router.post('/', verificaToken, (req, res) => {
+// router.post('/', verificaToken, (req, res) => { // por los momentos le quito la verificacion de token
+router.post('/', (req, res) => {
     const body = req.body
 
     const usuario = new Usuario({

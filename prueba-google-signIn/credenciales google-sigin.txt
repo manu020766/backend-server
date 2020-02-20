@@ -1,0 +1,11 @@
+https://console.cloud.google.com/apis/credentials?clientUpdateTime=2020-02-16T00:41:07.528391Z&project=spheric-gearing-268400
+
+proyecto: google-sigin creado con el usuario: manu020766@gmail.com - Afarim_1966
+
+
+ID de cliente.....: 487557979160-kcoi5lrsrh3ur5g86j2oilf0v0sebfag.apps.googleusercontent.com
+Secreto de cliente: 0hPkzHes28xNGA8IyikP3M_e
+
+manu020766@gmail.com
+
+token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7InJvbGUiOiJVU0VSX1JPTEUiLCJnb29nbGUiOnRydWUsIl9pZCI6IjVlNDk2YThlZjRmYTJlMWFmMDhiMTk4ZSIsIm5vbWJyZSI6Ik1hbnUgU2kiLCJlbWFpbCI6Im1hbnUwMjA3NjZAZ21haWwuY29tIiwicGFzc3dvcmQiOiI6KSIsImltZyI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS8tR05rZEhrczZ4cFUvQUFBQUFBQUFBQUkvQUFBQUFBQUFBQUEvQUNIaTNyZkEtaklvbTB0R1dZOUhqTjhsZXYyUUZyQUJkUS9zOTYtYy9waG90by5qcGciLCJfX3YiOjB9LCJpYXQiOjE1ODE4Njk3MTEsImV4cCI6MTU4MTg4NDExMX0.cX9LbKe4eINm_5DEv0qWyPK7qP3RrTUFc8J08kKGwFw"
