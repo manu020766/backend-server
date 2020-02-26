@@ -26,7 +26,7 @@ router.get('', (req, res) => {
     desde = desde < 0 ? 0 : desde
     mostrar = mostrar < 0 ? MINIMO_MOSTRAR : mostrar
 
-    Usuario.find({},'nombre email role img')
+    Usuario.find({},'nombre email role img google')
         .skip(desde)
         .limit(mostrar)
         .sort('-nombre') //con el signo - delante orden desc, sin signo asc
